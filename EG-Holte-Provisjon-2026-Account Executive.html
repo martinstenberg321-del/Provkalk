@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provisjonskalkulator – EG Holte 2026</title>
+<style>
+:root{--orange:#FF7500;--orange-dark:#4D2300;--orange-light:#FFF1E5;--grey-dark:#29303B;--grey-1:#424D60;--grey-2:#687180;--grey-3:#939DB0;--grey-5:#E9EBEF;--grey-6:#F4F5F7;--grey-7:#FAFAFB;--white:#FFFFFF;--green:#2E8B57;--red:#D94040;--blue:#2563EB;--blue-light:#EFF6FF;--blue-dark:#1E3A5F}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:var(--white);color:var(--grey-dark);min-height:100vh;padding:24px}
+.wrap{max-width:920px;margin:0 auto}
+.card{background:var(--white);border:1px solid var(--grey-5);border-radius:10px;padding:18px;margin-bottom:14px}
+.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:16px}
+.m{background:var(--grey-7);border:1px solid var(--grey-5);border-radius:10px;padding:14px}
+.m.tinted{background:var(--orange-light);border-color:rgba(255,117,0,.15)}
+.m.tinted-blue{background:var(--blue-light);border-color:rgba(37,99,235,.15)}
+.ml{font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:.7px;color:var(--grey-2);margin-bottom:5px}
+.mv{font-size:22px;font-weight:bold;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.ms{font-size:11px;color:var(--grey-2);margin-top:3px}
+.pt{height:6px;background:var(--grey-5);border-radius:3px;overflow:hidden;margin-top:7px}
+.pf{height:100%;border-radius:3px;transition:width .5s ease}
+.tabs{display:flex;gap:2px;overflow-x:auto;padding:3px;margin-bottom:16px;background:var(--grey-6);border-radius:10px}
+.tab{padding:8px 13px;border-radius:8px;border:none;background:transparent;color:var(--grey-2);font-size:12px;font-weight:bold;cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .15s}
+.tab:hover{background:var(--white);color:var(--grey-dark)}
+.tab.act{background:var(--white);color:var(--orange);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-left:5px;vertical-align:middle}
+.ir{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:end}
+.ir3{display:grid;grid-template-columns:2fr 1fr auto;gap:8px;align-items:end}
+.ig label{display:block;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;color:var(--grey-2);margin-bottom:4px}
+.ig input{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--grey-5);background:var(--white);color:var(--grey-dark);font-size:13px;outline:none;font-family:inherit;transition:border-color .15s}
+.ig input:focus{border-color:var(--orange);box-shadow:0 0 0 2px rgba(255,117,0,.1)}
+.ig input::placeholder{color:var(--grey-3)}
+.ba{padding:10px 20px;border-radius:8px;border:none;background:var(--orange);color:var(--white);font-size:13px;font-weight:bold;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s}
+.ba:hover{background:#E66A00}
+.ba:disabled{opacity:.4;cursor:default}
+.ba-blue{padding:10px 20px;border-radius:8px;border:none;background:var(--blue);color:var(--white);font-size:13px;font-weight:bold;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s}
+.ba-blue:hover{background:#1D4ED8}
+.ba-blue:disabled{opacity:.4;cursor:default}
+.sr{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--grey-5);font-size:12px}
+.sr3{display:grid;grid-template-columns:2fr 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--grey-5);font-size:12px}
+.bd{background:none;border:none;color:var(--grey-3);cursor:pointer;padding:4px 8px;border-radius:4px;font-size:15px;transition:all .15s}
+.bd:hover{color:var(--red);background:rgba(217,64,64,.08)}
+table.tt{width:100%;border-collapse:collapse;font-size:12px}
+.tt th{text-align:left;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;color:var(--grey-2);padding:8px 10px;border-bottom:2px solid var(--grey-5)}
+.tt td{padding:8px 10px;border-bottom:1px solid var(--grey-5);font-variant-numeric:tabular-nums}
+.tt tr.ta{background:var(--orange-light)}
+.tt tr.sel{background:var(--orange-light);cursor:pointer}
+.tt tr.clickable{cursor:pointer}
+.tt tr.clickable:hover{background:var(--grey-7)}
+.bl{background:none;border:none;color:var(--orange);cursor:pointer;font-size:11px;font-weight:bold;font-family:inherit}
+.bl:hover{text-decoration:underline}
+.br{background:none;border:1px solid var(--grey-5);color:var(--grey-2);cursor:pointer;font-size:10px;font-weight:bold;font-family:inherit;padding:6px 12px;border-radius:6px;transition:all .15s}
+.br:hover{border-color:var(--red);color:var(--red)}
+.badge{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:bold}
+.delta-preview{font-size:11px;color:var(--grey-2);margin-bottom:10px;margin-top:-6px}
+.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.logo{width:36px;height:36px;border-radius:8px;background:var(--orange);display:flex;align-items:center;justify-content:center}
+.section-title{font-size:14px;font-weight:bold;color:var(--grey-dark);margin-bottom:14px}
+.footer{text-align:center;padding:12px 0;font-size:10px;color:var(--grey-3)}
+@media(max-width:600px){.mg{grid-template-columns:1fr 1fr}.ir,.ir3{grid-template-columns:1fr}.sr{grid-template-columns:1fr 1fr}.sr3{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const AT=2090000,AV=340000,Y=2026;
+const MT={0:190000,1:190000,2:199500,3:171000,4:180500,5:190000,6:38000,7:190000,8:199500,9:209000,10:190000,11:142500};
+const MN=["Januar","Februar","Mars","April","Mai","Juni","Juli","August","September","Oktober","November","Desember"];
+const TIERS=[{l:0,u:.3,r:.1},{l:.3,u:.5,r:.2},{l:.5,u:.75,r:.3},{l:.75,u:1,r:.3},{l:1,u:1.15,r:.65},{l:1.15,u:1.4,r:.7},{l:1.4,u:3,r:.75}];
+const SK="eg-holte-prov-mart-2026";
+
+const SDAYS={0:20,1:20,2:21,3:18,4:19,5:20,6:4,7:20,8:21,9:22,10:20,11:15};
+function sdim(y,m){return SDAYS[m]}
+function sdel(y,m){const t=new Date(),dim=new Date(y,m+1,0).getDate();if(t.getFullYear()>y||(t.getFullYear()===y&&t.getMonth()>m))return SDAYS[m];if(t.getFullYear()<y||(t.getFullYear()===y&&t.getMonth()<m))return 0;return Math.min(SDAYS[m],Math.round(SDAYS[m]*(t.getDate()/dim)))}
+function sdrem(y,m){return SDAYS[m]-sdel(y,m)}
+function mv(m){return(MT[m]/AT)*AV}
+function mcomm(sales,m){const att=MT[m]>0?sales/MT[m]:0,v=mv(m);let r=0;for(const t of TIERS)if(att>t.l)r=t.r;return Math.min(v*att*r,v*3)}
+function svcComm(svcTotal,licenseAtt){return svcTotal*(licenseAtt>=1.15?0.20:0.05)}
+function tier(att){for(let i=TIERS.length-1;i>=0;i--)if(att>TIERS[i].l)return TIERS[i];return TIERS[0]}
+function fmt(n){return Math.round(n).toLocaleString("nb-NO")}
+function pct(n){return(n*100).toFixed(1).replace(".",",")+"%"}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+let data={},svcData={},selMonth=new Date().getMonth(),showTiers=false,editId=null,svcEditId=null;
+
+function load(){
+  try{const s=localStorage.getItem(SK);
+    if(s){const p=JSON.parse(s);data=p.sales||{};svcData=p.services||{}}
+  }catch(e){data={};svcData={}}
+}
+function save(){localStorage.setItem(SK,JSON.stringify({sales:data,services:svcData}))}
+
+function addSale(){
+  const ci=document.getElementById('f-co'),ni=document.getElementById('f-new'),oi=document.getElementById('f-old');
+  const c=ci.value.trim(),n=parseFloat(ni.value)||0,o=parseFloat(oi.value)||0,d=n-o;
+  if(!c||d<=0)return;
+  if(editId){
+    const arr=data[selMonth]||[];const idx=arr.findIndex(s=>s.id===editId);
+    if(idx>=0){arr[idx]={...arr[idx],company:c,newLicense:n,oldLicense:o,delta:d};data[selMonth]=arr}
+    editId=null;
+  } else {
+    if(!data[selMonth])data[selMonth]=[];
+    data[selMonth].push({id:Date.now().toString(),company:c,newLicense:n,oldLicense:o,delta:d,date:new Date().toISOString().split('T')[0]});
+  }
+  save();ci.value='';ni.value='';oi.value='';render();
+}
+function editSale(id){
+  const s=(data[selMonth]||[]).find(x=>x.id===id);if(!s)return;
+  editId=id;svcEditId=null;render();
+  setTimeout(()=>{const ci=document.getElementById('f-co'),ni=document.getElementById('f-new'),oi=document.getElementById('f-old');
+    if(ci){ci.value=s.company;ni.value=s.newLicense;oi.value=s.oldLicense||'';showDelta();ci.focus()}},10);
+}
+function cancelEdit(){editId=null;render()}
+function delSale(m,id){data[m]=(data[m]||[]).filter(s=>s.id!==id);if(!data[m].length)delete data[m];if(editId===id)editId=null;save();render()}
+
+function addSvc(){
+  const ci=document.getElementById('s-co'),ai=document.getElementById('s-amt');
+  const c=ci.value.trim(),a=parseFloat(ai.value)||0;
+  if(!c||a<=0)return;
+  if(svcEditId){
+    const arr=svcData[selMonth]||[];const idx=arr.findIndex(s=>s.id===svcEditId);
+    if(idx>=0){arr[idx]={...arr[idx],company:c,amount:a};svcData[selMonth]=arr}
+    svcEditId=null;
+  } else {
+    if(!svcData[selMonth])svcData[selMonth]=[];
+    svcData[selMonth].push({id:'svc-'+Date.now().toString(),company:c,amount:a,date:new Date().toISOString().split('T')[0]});
+  }
+  save();ci.value='';ai.value='';render();
+}
+function editSvc(id){
+  const s=(svcData[selMonth]||[]).find(x=>x.id===id);if(!s)return;
+  svcEditId=id;editId=null;render();
+  setTimeout(()=>{const ci=document.getElementById('s-co'),ai=document.getElementById('s-amt');
+    if(ci){ci.value=s.company;ai.value=s.amount;ci.focus()}},10);
+}
+function cancelSvcEdit(){svcEditId=null;render()}
+function delSvc(m,id){svcData[m]=(svcData[m]||[]).filter(s=>s.id!==id);if(!svcData[m].length)delete svcData[m];if(svcEditId===id)svcEditId=null;save();render()}
+
+function resetAll(){if(confirm('Slette alle salg og tjenester?')){data={};svcData={};localStorage.removeItem(SK);render()}}
+
+function render(){
+  const ms=data[selMonth]||[],mt=MT[selMonth],mTotal=ms.reduce((s,x)=>s+x.delta,0);
+  const mAtt=mt>0?mTotal/mt:0,mLicComm=mcomm(mTotal,selMonth);
+  const mSvc=(svcData[selMonth]||[]).reduce((s,x)=>s+x.amount,0);
+  const mSvcComm=svcComm(mSvc,mAtt);
+  const mComm=mLicComm+mSvcComm;
+  const to100=Math.max(0,mt-mTotal),to115=Math.max(0,mt*1.15-mTotal);
+  const tDays=sdim(Y,selMonth),eDays=sdel(Y,selMonth),rDays=sdrem(Y,selMonth);
+  const prorated=tDays>0?mt*(eDays/tDays):0,budDelta=mTotal-prorated;
+  const c100=mcomm(mt,selMonth),c115=mcomm(mt*1.15,selMonth),ct=tier(mAtt);
+
+  let h=`<div class="hdr"><div style="display:flex;align-items:center;gap:12px">
+    <div class="logo"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 17V7l7-5 7 5v10H3z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M8 17v-5h4v5" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></div>
+    <div><div style="font-size:18px;font-weight:bold">Provisjonskalkulator</div><div style="font-size:11px;color:var(--grey-2)">EG Holte · ${Y}</div></div></div>
+    <button class="br" onclick="resetAll()">Nullstill</button></div>`;
+
+  h+=`<div class="tabs">`;
+  for(let i=0;i<12;i++){const s=(data[i]||[]).reduce((a,x)=>a+x.delta,0),p=s/MT[i];
+    h+=`<button class="tab${i===selMonth?' act':''}" onclick="selMonth=${i};editId=null;svcEditId=null;render()">${MN[i].substring(0,3)}${s>0?`<span class="dot" style="background:${p>=1?'var(--green)':p>.5?'var(--orange)':'var(--red)'}"></span>`:''}</button>`}
+  h+=`</div>`;
+
+  h+=`<div class="mg">
+    <div class="m"><div class="ml">Månedsbudsjett</div><div class="mv">${fmt(mt)}</div><div class="ms">Solgt: ${fmt(mTotal)} kr (${pct(mAtt)})</div><div class="pt"><div class="pf" style="width:${Math.min(mAtt*100,100)}%;background:${mAtt>=1?'var(--green)':'var(--orange)'}"></div></div></div>
+    <div class="m tinted"><div class="ml" style="color:var(--orange-dark)">Lisensprovisjon</div><div class="mv" style="color:var(--orange)">${fmt(mLicComm)} kr</div><div class="ms" style="color:var(--orange-dark)">Ved 100%: ${fmt(c100)} · 115%: ${fmt(c115)}</div></div>
+    <div class="m tinted-blue"><div class="ml" style="color:var(--blue-dark)">Tjenesteprovisjon</div><div class="mv" style="color:var(--blue)">${fmt(mSvcComm)} kr</div><div class="ms" style="color:var(--blue-dark)">Tjenestesalg: ${fmt(mSvc)} kr · Sats: ${mAtt>=1.15?'20':'5'}%</div></div>
+    <div class="m" style="background:var(--orange-light);border-color:rgba(255,117,0,.2)"><div class="ml" style="color:var(--orange-dark)">Total provisjon</div><div class="mv" style="color:var(--orange)">${fmt(mComm)} kr</div><div class="ms" style="color:var(--orange-dark)">Lisens: ${fmt(mLicComm)} + Tjeneste: ${fmt(mSvcComm)}</div></div>
+    <div class="m"><div class="ml">Til 100%</div><div class="mv" style="color:${to100===0?'var(--green)':'var(--grey-dark)'}">${to100===0?'✓ Nådd':fmt(to100)+' kr'}</div><div class="ms">${to100>0?fmt(to100)+' kr igjen':''}</div></div>
+    <div class="m"><div class="ml">Til 115%</div><div class="mv" style="color:${to115===0?'var(--green)':'var(--grey-dark)'}">${to115===0?'✓ Nådd':fmt(to115)+' kr'}</div><div class="ms">Mål: ${fmt(Math.round(mt*1.15))} kr${to115===0?' · Tjenestesats: 20%':''}</div></div>
+    <div class="m"><div class="ml">vs. budsjett i dag</div><div class="mv" style="color:${budDelta>=0?'var(--green)':'var(--red)'}">${budDelta>=0?'+':''}${fmt(budDelta)} kr</div><div class="ms">Proratert: ${fmt(prorated)} (${eDays}/${tDays} dager)</div></div>
+    <div class="m"><div class="ml">Salgsdager igjen</div><div class="mv" style="color:var(--orange)">${rDays}</div><div class="ms">av ${tDays} i ${MN[selMonth].toLowerCase()}</div></div>
+  </div>`;
+
+  h+=`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center">
+    <div style="font-size:13px;font-weight:bold;display:flex;align-items:center;gap:8px">Provisjonssats
+      <span class="badge" style="background:${mAtt>=1?'var(--orange-light)':'var(--grey-6)'};color:${mAtt>=1?'var(--orange)':'var(--grey-1)'}">${(ct.r*100).toFixed(0)}% · ${pct(mAtt)} oppnåelse</span></div>
+    <button class="bl" onclick="showTiers=!showTiers;render()">${showTiers?'Skjul':'Vis'} trinn</button></div>`;
+  if(showTiers){const v=mv(selMonth);
+    h+=`<table class="tt" style="margin-top:12px"><thead><tr><th>Trinn</th><th>Sats</th><th>Utbetaling</th></tr></thead><tbody>`;
+    for(let i=0;i<TIERS.length;i++){const t=TIERS[i],cur=mAtt>t.l&&(mAtt<=t.u||i===TIERS.length-1),pas=mAtt>t.u&&i<TIERS.length-1,po=Math.min(v*mAtt*t.r,v*3);
+      h+=`<tr${cur?' class="ta"':''} style="opacity:${!cur&&!pas?.45:1}"><td style="font-weight:${cur?'bold':'normal'}">${pct(t.l)} – ${pct(t.u)} ${cur?'←':''}</td><td style="font-weight:${cur?'bold':'normal'}">${(t.r*100).toFixed(0)}%</td><td style="font-weight:${cur?'bold':'normal'};color:${cur?'var(--orange)':'inherit'}">${cur?fmt(po)+' kr':pas?'✓':'—'}</td></tr>`}
+    h+=`</tbody><tfoot><tr><td colspan="3" style="font-size:10px;color:var(--grey-3);padding-top:10px;border-bottom:none">Lisens: MIN(variabel × oppnåelse × sats, variabel × 3) · Tjeneste: ${mAtt>=1.15?'20':'5'}% av tjenestesalg (20% ved ≥115%)</td></tr></tfoot></table>`}
+  h+=`</div>`;
+
+  h+=`<div class="card"><div class="section-title">${MN[selMonth]} – Lisenssalg</div>
+    <div class="ir" style="margin-bottom:14px${editId?';border-left:3px solid var(--orange);padding-left:12px':''}">
+      <div class="ig"><label>Firmanavn</label><input id="f-co" placeholder="Byggmester AS" onkeydown="if(event.key==='Enter')addSale()"></div>
+      <div class="ig"><label>Ny lisens (kr)</label><input id="f-new" type="number" placeholder="0" onkeydown="if(event.key==='Enter')addSale()" oninput="showDelta()"></div>
+      <div class="ig"><label>Gammel lisens (kr)</label><input id="f-old" type="number" placeholder="0" onkeydown="if(event.key==='Enter')addSale()" oninput="showDelta()"></div>
+      <div style="display:flex;gap:4px;align-items:end">${editId?`<button class="ba" onclick="addSale()">✓ Lagre</button><button class="br" onclick="cancelEdit()" style="padding:10px 12px">Avbryt</button>`:`<button class="ba" onclick="addSale()">+ Legg til</button>`}</div>
+    </div><div id="delta-preview" class="delta-preview" style="display:none"></div>`;
+  if(ms.length>0){
+    h+=`<div class="sr" style="padding-bottom:6px"><span style="font-size:10px;font-weight:bold;color:var(--grey-2);text-transform:uppercase;letter-spacing:.5px">Firma</span><span style="font-size:10px;font-weight:bold;color:var(--grey-2);text-transform:uppercase;letter-spacing:.5px">Ny lisens</span><span style="font-size:10px;font-weight:bold;color:var(--grey-2);text-transform:uppercase;letter-spacing:.5px">Gml. lisens</span><span style="font-size:10px;font-weight:bold;color:var(--grey-2);text-transform:uppercase;letter-spacing:.5px">Din oms.</span><span></span></div>`;
+    for(const s of ms){const isEditing=editId===s.id;h+=`<div class="sr" style="cursor:pointer;border-radius:6px;padding:10px 6px;${isEditing?'background:var(--orange-light);':''}" onclick="editSale('${s.id}')"><span style="font-weight:bold;font-size:12px">${esc(s.company)}</span><span style="font-size:12px;color:var(--grey-1)">${fmt(s.newLicense)}</span><span style="font-size:12px;color:var(--grey-2)">${fmt(s.oldLicense)}</span><span style="font-size:12px;color:var(--orange);font-weight:bold">+${fmt(s.delta)}</span><button class="bd" onclick="event.stopPropagation();delSale(${selMonth},'${s.id}')" title="Slett">×</button></div>`}
+    h+=`<div style="display:flex;justify-content:flex-end;padding-top:10px;border-top:2px solid var(--grey-5);margin-top:4px"><span style="font-size:13px;font-weight:bold">Sum: <span style="color:var(--orange)">${fmt(mTotal)} kr</span></span></div>`;
+  } else h+=`<div style="text-align:center;padding:24px 0;color:var(--grey-3);font-size:12px">Ingen lisenssalg registrert for ${MN[selMonth].toLowerCase()} ennå.</div>`;
+  h+=`</div>`;
+
+  const svcs=svcData[selMonth]||[];
+  h+=`<div class="card" style="border-left:3px solid var(--blue)"><div class="section-title" style="display:flex;align-items:center;gap:8px">${MN[selMonth]} – Tjenestesalg <span class="badge" style="background:var(--blue-light);color:var(--blue)">${mAtt>=1.15?'20':'5'}% provisjon</span></div>
+    <div class="ir3" style="margin-bottom:14px${svcEditId?';border-left:3px solid var(--blue);padding-left:12px':''}">
+      <div class="ig"><label>Firmanavn</label><input id="s-co" placeholder="Kunde AS" onkeydown="if(event.key==='Enter')addSvc()"></div>
+      <div class="ig"><label>Beløp (kr)</label><input id="s-amt" type="number" placeholder="0" onkeydown="if(event.key==='Enter')addSvc()"></div>
+      <div style="display:flex;gap:4px;align-items:end">${svcEditId?`<button class="ba-blue" onclick="addSvc()">✓ Lagre</button><button class="br" onclick="cancelSvcEdit()" style="padding:10px 12px">Avbryt</button>`:`<button class="ba-blue" onclick="addSvc()">+ Legg til</button>`}</div>
+    </div>`;
+  if(svcs.length>0){
+    h+=`<div class="sr3" style="padding-bottom:6px"><span style="font-size:10px;font-weight:bold;color:var(--grey-2);text-transform:uppercase;letter-spacing:.5px">Firma</span><span style="font-size:10px;font-weight:bold;color:var(--grey-2);text-transform:uppercase;letter-spacing:.5px">Beløp</span><span></span></div>`;
+    for(const s of svcs){const isEd=svcEditId===s.id;h+=`<div class="sr3" style="cursor:pointer;border-radius:6px;padding:10px 6px;${isEd?'background:var(--blue-light);':''}" onclick="editSvc('${s.id}')"><span style="font-weight:bold;font-size:12px">${esc(s.company)}</span><span style="font-size:12px;color:var(--blue);font-weight:bold">${fmt(s.amount)} kr</span><button class="bd" onclick="event.stopPropagation();delSvc(${selMonth},'${s.id}')" title="Slett">×</button></div>`}
+    h+=`<div style="display:flex;justify-content:space-between;padding-top:10px;border-top:2px solid var(--grey-5);margin-top:4px"><span style="font-size:12px;color:var(--grey-2)">Provisjon: ${mAtt>=1.15?'20':'5'}% = <strong style="color:var(--blue)">${fmt(mSvcComm)} kr</strong></span><span style="font-size:13px;font-weight:bold">Sum: <span style="color:var(--blue)">${fmt(mSvc)} kr</span></span></div>`;
+  } else h+=`<div style="text-align:center;padding:24px 0;color:var(--grey-3);font-size:12px">Ingen tjenestesalg registrert for ${MN[selMonth].toLowerCase()} ennå.</div>`;
+  h+=`</div>`;
+
+  h+=`<div class="card"><div class="section-title" style="margin-bottom:12px">Årsoversikt</div><div style="overflow-x:auto"><table class="tt"><thead><tr><th>Mnd</th><th>Budsjett</th><th>Lisens</th><th>%</th><th>Lis.prov</th><th>Tjeneste</th><th>Tj.prov</th><th>Total</th></tr></thead><tbody>`;
+  let totS=0,totLC=0,totSvc=0,totSvcC=0;
+  for(let i=0;i<12;i++){
+    const s=(data[i]||[]).reduce((a,x)=>a+x.delta,0),t=MT[i],a=t>0?s/t:0;
+    const lc=mcomm(s,i);
+    const sv=(svcData[i]||[]).reduce((a,x)=>a+x.amount,0);
+    const sc=svcComm(sv,a);
+    const d=sdrem(Y,i),sel=i===selMonth;
+    totS+=s;totLC+=lc;totSvc+=sv;totSvcC+=sc;
+    h+=`<tr class="${sel?'sel':'clickable'}" onclick="selMonth=${i};editId=null;svcEditId=null;render()">
+      <td style="font-weight:${sel?'bold':'normal'};color:${sel?'var(--orange)':'var(--grey-dark)'}">${MN[i].substring(0,3)}</td>
+      <td>${fmt(t)}</td>
+      <td style="color:${s>0?'var(--grey-dark)':'var(--grey-3)'};font-weight:${s>0?'bold':'normal'}">${s>0?fmt(s):'—'}</td>
+      <td style="color:${a>=1?'var(--green)':a>0?'var(--orange)':'var(--grey-3)'}">${s>0?pct(a):'—'}</td>
+      <td style="color:${lc>0?'var(--orange)':'var(--grey-3)'};font-weight:${lc>0?'bold':'normal'}">${lc>0?fmt(lc):'—'}</td>
+      <td style="color:${sv>0?'var(--grey-dark)':'var(--grey-3)'}">${sv>0?fmt(sv):'—'}</td>
+      <td style="color:${sc>0?'var(--blue)':'var(--grey-3)'};font-weight:${sc>0?'bold':'normal'}">${sc>0?fmt(sc):'—'}</td>
+      <td style="color:var(--orange);font-weight:bold">${(lc+sc)>0?fmt(lc+sc):'—'}</td></tr>`}
+  h+=`</tbody><tfoot><tr style="font-weight:bold;border-top:2px solid var(--grey-5)">
+    <td>Sum</td><td>${fmt(AT)}</td><td>${fmt(totS)}</td><td></td><td style="color:var(--orange)">${fmt(totLC)}</td><td>${fmt(totSvc)}</td><td style="color:var(--blue)">${fmt(totSvcC)}</td><td style="color:var(--orange)">${fmt(totLC+totSvcC)}</td></tr></tfoot></table></div></div>`;
+
+  h+=`<div class="footer">EG Holte · Data lagres lokalt · Salgsdager ekskl. helger og norske helligdager</div>`;
+  document.getElementById('app').innerHTML=h;
+}
+
+function showDelta(){
+  const n=parseFloat(document.getElementById('f-new')?.value)||0,o=parseFloat(document.getElementById('f-old')?.value)||0,d=n-o,el=document.getElementById('delta-preview');
+  if(el){if(n>0){el.style.display='block';el.innerHTML=`Din omsetning: <strong style="color:var(--orange)">${fmt(d)} kr</strong>`}else el.style.display='none'}
+}
+
+load();render();
+</script>
+</body>
+</html>
